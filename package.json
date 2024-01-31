@@ -1,0 +1,40 @@
+{
+  "name": "sandbox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "npm-run-all --parallel shopify:serve vite:dev",
+    "deploy": "npm-run-all --parallel vite:build shopify:deploy",
+    "shopify:deploy": "shopify theme push -n --ignore config/settings_data.json templates/*.json sections/*.json locales/*.json --store=sungs-sandbox",
+    "shopify:deploy-with-content": "npm-run-all -s vite:build && shopify theme push --store=sungs-sandbox",
+    "shopify:deploy-new": "npm-run-all -s vite:build shopify:pull-content && shopify theme push --unpublished --store=sungs-sandbox",
+    "shopify:serve": " shopify theme dev --live-reload=full-page",
+    "shopify:pull": "shopify theme pull --ignore config/*.json sections/*.json templates/*.json locales/*.json",
+    "shopify:pull-content": "shopify theme pull -n --only config/*.json templates/*.json sections/*.json locales/*.json --store=sungs-sandbox",
+    "shopify:push": "shopify theme push --ignore config/*.json sections/*.json templates/*.json locales/*.json",
+    "vite:dev": "vite",
+    "vite:build": "vite build",
+    "preview": "vite preview",
+    "lint": "npm-run-all -s -c lint:*",
+    "lint:js": "eslint src/**/*.{js,jsx} --config .config/.eslintrc.js",
+    "lint:css": "stylelint src/**/*.{jsx,css,sass,scss} --config .config/.stylelintrc.js",
+    "lint:shopify": "shopify theme check",
+    "fix": "npm-run-all -s -c fix:*",
+    "fix:js": "eslint src/**/*.{js,jsx} --config .config/.eslintrc.js --fix",
+    "fix:css": "stylelint src/**/*.{jsx,css,sass,scss} --config .config/.stylelintrc.js --fix",
+    "fix:shopify": "shopify theme check -a",
+    "test": "jest --env=jsdom",
+    "login": "shopify theme list --store=sungs-sandbox",
+    "login:staging": "shopify theme list --store=sungs-sandbox"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "vite": "^5.0.11",
+    "vite-plugin-shopify": "^3.0.0"
+  }
+}

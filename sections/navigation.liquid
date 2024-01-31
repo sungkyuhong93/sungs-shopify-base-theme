@@ -1,0 +1,150 @@
+{% assign menu = section.settings.menu %}
+
+<nav class="main-nav">
+  {% if menu.size > 0 %}
+    <ul class="top-level">
+      {% for item in menu.links %}
+        <li class="top-level-item">
+          {% comment %}
+            First level items show the sub navigation items on hover.
+          {% endcomment %}
+          <a class="top-level-link" href="{{ item.url }}">{{ item.title }}</a>
+          {% if item.links.size > 0 %}
+            <ul class="sub-nav hidden-nav">
+              {% for child in item.links %}
+                <li class="sub-nav-item">
+                  {% comment %}
+                    Below is the second level url. This acts as a title element,
+                    so it doesn't have a url attached to it.
+                  {% endcomment %}
+                  <strong class="sub-title">{{ child.title }}</strong>
+                  {% assign sortedLinks = child.links | sort: 'title' %}
+                  {% if sortedLinks.size > 0 %}
+                    <ul>
+                      {% comment %}
+                        Third level items that are sorted alphabetically.
+                        If it is the last item within the third level, it 
+                        will say Shop All and link to its second level parent navigation URL
+                      {% endcomment %}
+                      {% for link in sortedLinks %}
+                        {% if forloop.last %}
+                          <li class="sub-nav-item italicized">
+                            <a href="{{ child.url }}">Shop All</a>
+                          </li>
+                          {% else %}
+                          <li class="sub-nav-item">
+                            <a href="{{ link.url }}">{{ link.title }}</a>
+                          </li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No menu items available.</p>
+  {% endif %}
+</nav>
+
+<style>
+  ul {
+    list-style: none;
+  }
+
+  .top-level {
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .top-level-item a {
+      text-decoration: none;
+      color: #000;
+    }
+  }
+
+  .sub-nav {
+    padding-left: 0;
+    position: absolute;
+    top: 100%;
+    z-index: 100;
+    width: 100vw;
+    background-color: #FFF;
+    left: 0;
+    display: flex;
+    justify-content: space-around;
+    padding: 60px;
+
+    ul {
+      padding-left: 0;
+    }
+  }
+
+  .sub-title {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  .top-level-link {
+    margin-right: 40px;
+  }
+
+  .hidden-nav {
+    visibility: hidden;
+    height: 0;
+    opacity: 0;
+  }
+
+  .show-nav {
+    visibility: visible;
+    height: auto;
+    opacity: 1;
+  }
+
+  .italicized {
+    font-style: italic;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const topLevelItems = document.querySelectorAll('.top-level-item');
+
+  topLevelItems.forEach(function (topLevelItem) {
+    const topLevelLink = topLevelItem.querySelector(".top-level-link");
+    const subNav = topLevelItem.querySelector(".sub-nav");
+
+    topLevelItem.addEventListener('mouseover', function () {
+      subNav.classList.remove("hidden-nav");
+    });
+
+    topLevelItem.addEventListener('mouseout', function () {
+      subNav.classList.add("hidden-nav");
+    });
+  });
+});
+</script>
+
+{% schema %}
+  {
+    "name": "Mega Menu",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Main Menu"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Main Menu",
+        "category": "Custom"
+      }
+    ]
+  }
+{% endschema %}
