@@ -129,6 +129,12 @@
         "settings": {
           "color_scheme": "background-1"
         }
+      },
+      "navigation": {
+        "type": "navigation",
+        "settings": {
+          "menu": "mega-menu"
+        }
       }
     },
     "content_for_index": [

@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+*.log
+
+# ignore all files inside shopify/assets/ except files with 'static' keyword in their filename
+assets/*
+assets/*static*
+
+# ignore shopify json cms data
+config/settings_data.json
+templates/*.json
